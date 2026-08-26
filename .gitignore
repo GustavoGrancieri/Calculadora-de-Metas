@@ -1,0 +1,4 @@
+uploads/
+*.xlsx
+*.pdf
+__pycache__/
