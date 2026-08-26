@@ -10,9 +10,8 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# CONFIGURAÇÕES DE E-MAIL (Remetente)
-EMAIL_REMETENTE = "metas.acridistribuidora@gmail.com" 
-SENHA_REMETENTE = "dtoi yvrz dspw gswu"
+EMAIL_REMETENTE = "email@email.com" 
+SENHA_REMETENTE = "Senha"
 EMAIL_DESTINO_TESTE = "gustavograncieri@outlook.com"
 
 def enviar_email(nome_vendedor, caminho_pdf, resumo_venda, resumo_meta, resumo_falta):
@@ -64,15 +63,13 @@ def processar_arquivos():
     vendas_file.save(caminho_vendas)
 
     try:
-        # 1. Lendo as Vendas
         df_vendas = pd.read_excel(caminho_vendas, skiprows=8)
         df_vendas.columns = ['Emitente', 'Dt.Emissão', 'NFe', 'Série', 'Operação', 'Cliente', 
                              'Valor Total', 'Valor Desconto', 'Valor Líquido', 'Vendedor Nome', 
                              'Descrição Produto', 'Lista Grupo Produtos']
         df_vendas = df_vendas.dropna(subset=['Vendedor Nome'])
         df_vendas['Valor Líquido'] = pd.to_numeric(df_vendas['Valor Líquido'], errors='coerce')
-        
-        # Agrupamento geral para saber o total de cada vendedor
+
         vendas_agrupadas = df_vendas.groupby('Vendedor Nome')['Valor Líquido'].sum().reset_index()
 
         meta_padrao = 457000.00 
@@ -85,18 +82,15 @@ def processar_arquivos():
             if falta_para_meta < 0: 
                 falta_para_meta = 0
 
-            # 2. NOVA PARTE: Agrupando as vendas específicas desse vendedor por Categoria
             df_vendedor_atual = df_vendas[df_vendas['Vendedor Nome'] == nome]
             grupos_produtos = df_vendedor_atual.groupby('Lista Grupo Produtos')['Valor Líquido'].sum().reset_index()
-            
-            # Montando as linhas da tabela dinamicamente
+
             linhas_tabela = ""
             for _, g_row in grupos_produtos.iterrows():
                 grupo_nome = g_row['Lista Grupo Produtos']
                 grupo_valor = g_row['Valor Líquido']
                 linhas_tabela += f"<tr><td>{grupo_nome}</td><td>R$ {grupo_valor:,.2f}</td></tr>"
 
-            # 3. HTML ESTILIZADO PARA O PDF
             html_content = f"""
             <!DOCTYPE html>
             <html lang="pt-BR">
@@ -201,13 +195,11 @@ def processar_arquivos():
             </body>
             </html>
             """
-            
-            # Gerando o PDF com a xhtml2pdf
+
             caminho_pdf = os.path.join(app.config['UPLOAD_FOLDER'], f"Relatorio_{nome}.pdf")
             with open(caminho_pdf, "w+b") as pdf_file:
                 pisa.CreatePDF(src=html_content, dest=pdf_file)
-            
-            # Enviando e-mail
+
             enviar_email(nome, caminho_pdf, total_vendido, meta_padrao, falta_para_meta)
 
         return render_template('sucesso.html')
