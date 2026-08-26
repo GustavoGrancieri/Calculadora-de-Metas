@@ -1,10 +1,10 @@
-# 🚀 Plataforma de Relatórios de Vendas
+#Plataforma de Relatórios de Vendas
 
 Uma aplicação web desenvolvida em Python (Flask) para automatizar a geração de relatórios de vendas, cálculo de metas e envio de resultados para a equipe. 
 
 O sistema processa planilhas de vendas, calcula o atingimento de metas individuais e globais, gera relatórios em PDF com design profissional e dispara automaticamente para os e-mails configurados.
 
-## ✨ Funcionalidades
+##Funcionalidades
 
 * **Upload de Planilhas:** Interface web moderna (efeito Glassmorphism) para upload de dados de Vendas e Metas.
 * **Processamento de Dados:** Utiliza `pandas` para cruzar dados, agrupar vendas por vendedor e por categoria de produtos.
@@ -13,7 +13,7 @@ O sistema processa planilhas de vendas, calcula o atingimento de metas individua
 * **Relatório Consolidado:** Gera um relatório geral com o desempenho de toda a equipe para a supervisão.
 * **Disparo de E-mails Automático:** Integração via protocolo SMTP para enviar os PDFs diretamente para a caixa de entrada dos envolvidos.
 
-## 🛠️ Tecnologias Utilizadas
+##Tecnologias Utilizadas
 
 * **Backend:** Python, Flask
 * **Processamento de Dados:** Pandas, OpenPyXL
@@ -21,7 +21,7 @@ O sistema processa planilhas de vendas, calcula o atingimento de metas individua
 * **Frontend:** HTML5, CSS3
 * **Envio de E-mails:** smtplib, email.message
 
-## 📁 Estrutura do Projeto
+##Estrutura do Projeto
 
 ```text
 /
